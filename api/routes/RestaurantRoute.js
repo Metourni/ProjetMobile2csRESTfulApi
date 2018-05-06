@@ -8,48 +8,108 @@ const Restaurant = require('../models/Restaurant')
 
 
 router.get('/', (req, res, next) => {
-    db.query('SELECT * FROM restaurants', function (err, result, fields) {
-        if (err)
-            throw err;
-        console.log(result);
-
-        res.status(200).json({
-            restaurants: result
-        });
-        //return result;
+    let restaurant = new Restaurant();
+    restaurant.find('all', (err, rows, fields) => {
+        console.log(fields);
+        if (err) {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        }
+        else {
+            if (rows) {
+                res.status(201).json({
+                    restaurant: rows
+                });
+            } else {
+                res.status(404).json({
+                    message: "Restaurant not found"
+                });
+            }
+        }
     });
-
 });
+
+// TODO : Pagination
+router.get('/page/:index', (req, res, next) => {
+    const i = req.params.index;
+
+    let restaurant = new Restaurant();
+    restaurant.find('all', {where:"id" ,limit: [0, 30]}, (err, rows, fields) => {
+        console.log(fields);
+        if (err) {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        }
+        else {
+            if (rows) {
+                res.status(201).json({
+                    restaurant: rows
+                });
+            } else {
+                res.status(404).json({
+                    message: "Restaurant not found"
+                });
+            }
+        }
+    });
+});
+
 
 router.get('/:restaurantId', (req, res, next) => {
     const id = req.params.restaurantId;
     let restaurant = new Restaurant();
-    let rss = restaurant.find();
     restaurant.find('all', {where: "id = " + id}, function (err, rows, fields) {
-        if (err)
-            console.log(err)
-        else
-            res.status(200).json({
-                restaurant: rows
+        if (err) {
+            console.log(err);
+            res.status(500).json({
+                error: err
             });
+        }
+        else {
+            if (rows) {
+                res.status(201).json({
+                    restaurant: rows
+                });
+            } else {
+                res.status(404).json({
+                    message: "Restaurant not found"
+                });
+            }
+        }
     });
 
-
-    res.status(200).json({
-        msg: "get one" + rss
-    });
 });
 
 router.post('/', (req, res, next) => {
-    const restaurant = {
+    const rest = {
         //body Parser allow us to use attr 'body'
         name: req.body.name,
-        id: 1
     };
-    res.status(200).json({
-        message: "Post",
-        restaurant: restaurant
-    })
+
+    let restaurant = new Restaurant(rest);
+    restaurant.save(function (err, rows, fields) {
+        if (err) {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        }
+        else {
+            if (rows) {
+                res.status(201).json({
+                    restaurant: rows
+                });
+            } else {
+                res.status(404).json({
+                    message: "Restaurant not found"
+                });
+            }
+        }
+    });
 });
 
 
@@ -62,9 +122,27 @@ router.patch('/:restaurantId', (req, res, next) => {
 
 router.delete('/:restaurantId', (req, res, next) => {
     const id = req.params.restaurantId;
-    res.status(200).json({
-        id: "deleted id is : " + id
-    })
+    let restaurant = new Restaurant();
+    restaurant.remove({where: "id = " + id}, function (err, rows, fields) {
+        if (err) {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        }
+        else {
+            if (rows) {
+                res.status(201).json({
+                    restaurant: rows
+                });
+            } else {
+                res.status(404).json({
+                    message: "Restaurant not found"
+                });
+            }
+        }
+    });
+
 });
 
 module.exports = router;
