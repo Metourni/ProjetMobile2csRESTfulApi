@@ -10,8 +10,28 @@ const
 /** Use the routers in the api to handel the requests */
 // Mogran it use for log all request
 app.use(morgan('dev'));
+
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+// Handling CORS
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin , Content-Type, X-Requested-With , Accept, Authorization"
+    );
+    if (req.methode === "OPTIONS") {
+        res.header(
+            "Access-Control-Allow-Methods",
+            "POST, PUT, PATCH, DELETE,GET"
+        );
+        return res.status(200).json({});
+    }
+    next();
+});
+
+
 app.use('/restaurants', restaurantRoutes);
 app.use('/dishes', dishRoutes);
 

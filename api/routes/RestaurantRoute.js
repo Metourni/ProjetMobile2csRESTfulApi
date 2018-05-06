@@ -20,8 +20,14 @@ router.get('/:restaurantId', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    const restaurant = {
+        //body Parser allow us to use attr 'body'
+        name: req.body.name,
+        id : 1
+    };
     res.status(200).json({
-        message: "Post"
+        message: "Post",
+        restaurant: restaurant
     })
 });
 
