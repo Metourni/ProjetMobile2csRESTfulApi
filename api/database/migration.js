@@ -19,7 +19,18 @@ con.connect(function(err) {
         "(" +
         "   id INT AUTO_INCREMENT PRIMARY KEY," +
         "   name VARCHAR(255), " +
-        "   address VARCHAR(255)" +
+        "   phoneNumber VARCHAR(255), " +
+        "   localisation VARCHAR(255), " +
+        "   email VARCHAR(255), " +
+        "   address VARCHAR(255), " +
+        "   description VARCHAR(1024), " +
+        "   facebook VARCHAR(255), " +
+        "   twitter VARCHAR(255), " +
+        "   rating INTEGER(11), " +
+        "   nbTable INTEGER(11), " +
+        "   dateOuv datetime, " +
+        "   dateFerm datetime, " +
+        "   image VARCHAR(255) " +
         ")";
 
 

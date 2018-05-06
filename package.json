@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "test",
-    "start": "node server.js"
+    "start": "node server.js",
+    "migrate": "node ./api/database/migration.js",
+    "create_db":"node ./api/database/create_db.js"
   },
   "keywords": [
     "node",
