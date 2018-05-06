@@ -4,7 +4,8 @@
 const express = require('express');
 const router = express.Router();
 //const db = require('../dal/DBConnection');
-const Restaurant = require('../models/Restaurant')
+const Restaurant = require('../models/Restaurant');
+const Paginator = 2;
 
 
 router.get('/', (req, res, next) => {
@@ -33,11 +34,19 @@ router.get('/', (req, res, next) => {
 
 // TODO : Pagination
 router.get('/page/:index', (req, res, next) => {
-    const i = req.params.index;
+    let i = 1;
+    if (req.params.index)
+        i = req.params.index;
+
+    let _start = (i * Paginator) - Paginator ; // _start > 0
+    let _end = i * Paginator; // _end =< count
+
+    if (_start <= 0)
+        _start = 0;
+    console.log("s = "+ _start+" e = "+_end+"  i="+i);
 
     let restaurant = new Restaurant();
-    restaurant.find('all', {where:"id" ,limit: [0, 30]}, (err, rows, fields) => {
-        console.log(fields);
+    restaurant.find('all', {limit: [_start, _end]}, (err, rows, fields) => {
         if (err) {
             console.log(err);
             res.status(500).json({
