@@ -3,7 +3,8 @@
 
 const express = require('express');
 const router = express.Router();
-const db = require('../dal/DBConnection');
+//const db = require('../dal/DBConnection');
+const Restaurant = require('../models/Restaurant')
 
 
 router.get('/', (req, res, next) => {
@@ -22,10 +23,21 @@ router.get('/', (req, res, next) => {
 
 router.get('/:restaurantId', (req, res, next) => {
     const id = req.params.restaurantId;
-    console.log(id);
+    let restaurant = new Restaurant();
+    let rss = restaurant.find();
+    restaurant.find('all', {where: "id = " + id}, function (err, rows, fields) {
+        if (err)
+            console.log(err)
+        else
+            res.status(200).json({
+                restaurant: rows
+            });
+    });
+
+
     res.status(200).json({
-        id: "your id is : " + id
-    })
+        msg: "get one" + rss
+    });
 });
 
 router.post('/', (req, res, next) => {
