@@ -124,10 +124,11 @@ router.post('/', (req, res, next) => {
 //TODO: Update restaurant.
 router.patch('/:restaurantId', (req, res, next) => {
     const id = req.params.restaurantId;
-    const rest = {
-        //body Parser allow us to use attr 'body'
-        name: req.body.name,
-    };
+    const newRestaurant = {};
+    for (const ops of req.body ){
+        newRestaurant[ops.propertyName] = ops.value
+    }
+    console.log(newRestaurant);
     let restaurant = new Restaurant();
     restaurant.find('first', {where: "id = " + id}, (err, rows, fields) => {
         if (err) {
@@ -136,10 +137,13 @@ router.patch('/:restaurantId', (req, res, next) => {
                 error: err
             });
         }else {
-            restaurant.set(rest);
+            restaurant.set(newRestaurant);
             restaurant.save();
         }
     })
+    res.status(500).json({
+        error: 'rt'
+    });
 });
 
 router.delete('/:restaurantId', (req, res, next) => {
@@ -155,7 +159,7 @@ router.delete('/:restaurantId', (req, res, next) => {
         else {
             if (rows) {
                 res.status(201).json({
-                    restaurant: rows
+                    message: "Successful deleted."
                 });
             } else {
                 res.status(404).json({
