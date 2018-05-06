@@ -32,18 +32,16 @@ router.get('/', (req, res, next) => {
     });
 });
 
-// TODO : Pagination
 router.get('/page/:index', (req, res, next) => {
     let i = 1;
     if (req.params.index)
         i = req.params.index;
 
-    let _start = (i * Paginator) - Paginator ; // _start > 0
+    let _start = (i * Paginator) - Paginator; // _start > 0
     let _end = i * Paginator; // _end =< count
 
     if (_start <= 0)
         _start = 0;
-    console.log("s = "+ _start+" e = "+_end+"  i="+i);
 
     let restaurant = new Restaurant();
     restaurant.find('all', {limit: [_start, _end]}, (err, rows, fields) => {
@@ -93,6 +91,7 @@ router.get('/:restaurantId', (req, res, next) => {
 
 });
 
+//TODO: set the full body of the restaurant.
 router.post('/', (req, res, next) => {
     const rest = {
         //body Parser allow us to use attr 'body'
@@ -122,10 +121,24 @@ router.post('/', (req, res, next) => {
 });
 
 
+//TODO: Update restaurant.
 router.patch('/:restaurantId', (req, res, next) => {
     const id = req.params.restaurantId;
-    res.status(200).json({
-        id: "updated id is : " + id
+    const rest = {
+        //body Parser allow us to use attr 'body'
+        name: req.body.name,
+    };
+    let restaurant = new Restaurant();
+    restaurant.find('first', {where: "id = " + id}, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        }else {
+            restaurant.set(rest);
+            restaurant.save();
+        }
     })
 });
 
