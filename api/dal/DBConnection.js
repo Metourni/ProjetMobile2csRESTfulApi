@@ -1,24 +1,23 @@
-
+"use strict";
 
 const mysql = require('mysql');
 
-const con = mysql.createConnection({
+const connection = mysql.createConnection({
     host: "localhost",
     port: "8889",
-    database : 'projet_mobile',
+    database: 'projet_mobile',
     user: "root",
     password: "root"
 });
 
-con.connect(function (err) {
+connection.connect(function (err) {
     if (err)
-    //throw err;
-        console.log("Error cnx!");
+        throw err;
     else
         console.log("Connected!");
 });
 
-
+/*
 function query(sql) {
     con.connect(function (err) {
         if (err) throw err;
@@ -28,4 +27,5 @@ function query(sql) {
             return result;
         });
     });
-}
+}*/
+module.exports = connection;

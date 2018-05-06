@@ -31,7 +31,7 @@ app.use((req, res, next) => {
     next();
 });
 
-
+// Routing
 app.use('/restaurants', restaurantRoutes);
 app.use('/dishes', dishRoutes);
 

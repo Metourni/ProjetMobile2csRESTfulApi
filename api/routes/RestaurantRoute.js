@@ -3,12 +3,21 @@
 
 const express = require('express');
 const router = express.Router();
+const db = require('../dal/DBConnection');
 
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: "Get"
-    })
+    db.query('SELECT * FROM restaurants', function (err, result, fields) {
+        if (err)
+            throw err;
+        console.log(result);
+
+        res.status(200).json({
+            restaurants: result
+        });
+        //return result;
+    });
+
 });
 
 router.get('/:restaurantId', (req, res, next) => {
@@ -23,7 +32,7 @@ router.post('/', (req, res, next) => {
     const restaurant = {
         //body Parser allow us to use attr 'body'
         name: req.body.name,
-        id : 1
+        id: 1
     };
     res.status(200).json({
         message: "Post",
