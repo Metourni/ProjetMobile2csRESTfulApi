@@ -7,11 +7,10 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
     res.status(200).json({
-        message: "Get"
+        message : "Get"
     })
 });
-
-router.get('/:restaurantId', (req, res, next) => {
+router.get('/:dishId', (req, res, next) => {
     const id = req.params.restaurantId;
     console.log(id);
     res.status(200).json({
@@ -21,39 +20,24 @@ router.get('/:restaurantId', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     res.status(200).json({
-        message: "Post"
+        message : "Post"
     })
 });
 
-
-router.patch('/:restaurantId', (req, res, next) => {
+router.patch('/:dishId', (req, res, next) => {
     const id = req.params.restaurantId;
     res.status(200).json({
         id: "updated id is : " + id
     })
 });
 
-router.delete('/:restaurantId', (req, res, next) => {
+router.delete('/:dishId', (req, res, next) => {
     const id = req.params.restaurantId;
     res.status(200).json({
         id: "deleted id is : " + id
     })
 });
 
+// To use router out of this file (registering)
 module.exports = router;
 
-/*
-module.exports = function (app) {
-    let restaurantCtrl = require('../controllers/RestaurantController');
-
-    // todoList Routes
-    app.route('/')
-        .get(restaurantCtrl.get_all_restaurant);
-
-
-    //app.route('/restaurant/:restaurant_id')
-      //  .get(restaurantCtrl.find_restaurant);
-    //.put(restaurantCtrl.)
-    //.delete(restaurantCtrl.);
-};
-*/

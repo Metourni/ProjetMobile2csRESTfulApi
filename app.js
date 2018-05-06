@@ -1,14 +1,36 @@
-const http = require('http');
+const
+    express = require('express'),
+    app = express(),
+    restaurantRoutes = require('./api/routes/RestaurantRoute'),
+    dishRoutes = require('./api/routes/DishRoute'),
+    morgan = require('morgan'),
+    bodyParser = require('body-parser');
 
-const hostname = '127.0.0.1';
-const port = 3000;
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
+/** Use the routers in the api to handel the requests */
+// Mogran it use for log all request
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use('/restaurants', restaurantRoutes);
+app.use('/dishes', dishRoutes);
+
+
+/** Handel Errors */
+app.use((req, res, next) => {
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    });
 });
+
+
+module.exports = app;

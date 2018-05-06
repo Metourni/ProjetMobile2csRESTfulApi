@@ -1,5 +1,16 @@
+'use strict';
 
 
+const http = require('http');
+const app = require('./app');
+const port = process.env.PORT || 3000;
+const server = http.createServer(app);
+
+server.listen(port);
+console.log('Restaurant RESTful API server started on : ' + port);
+
+
+/*
 let express = require('express'),
     app = express(),
     port = process.env.PORT || 3000,
@@ -29,3 +40,5 @@ console.log('Restaurant RESTful API server started on : ' + port);
 app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})
 });
+
+*/

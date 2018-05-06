@@ -15,7 +15,7 @@ con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
     let sql =
-        "CREATE TABLE restaurants " +
+        "CREATE TABLE IF NOT EXISTS restaurants " +
         "(" +
         "   id INT AUTO_INCREMENT PRIMARY KEY," +
         "   name VARCHAR(255), " +

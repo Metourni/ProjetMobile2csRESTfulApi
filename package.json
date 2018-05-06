@@ -6,8 +6,8 @@
   "scripts": {
     "test": "test",
     "start": "node server.js",
-    "migrate": "node ./api/database/migration.js",
-    "create_db":"node ./api/database/create_db.js"
+    "migrate": "node ./api/database/Migration.js",
+    "create_db": "node ./api/database/CreateDB.js"
   },
   "keywords": [
     "node",
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "express": "^4.16.3",
+    "morgan": "^1.9.0",
     "mysql": "^2.15.0"
   }
 }
