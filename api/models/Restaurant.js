@@ -1,13 +1,15 @@
 "use strict";
 
 const mysqlModel = require('mysql-model');
+require('dotenv').config();
+
 
 const MyAppModel = mysqlModel.createConnection({
-    host: "127.0.0.1",
-    port: "8889",
-    database: 'projet_mobile',
-    user: "root",
-    password: "root"
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD
 
 });
 

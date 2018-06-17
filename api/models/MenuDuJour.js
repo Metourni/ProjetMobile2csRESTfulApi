@@ -13,10 +13,10 @@ const MyAppModel = mysqlModel.createConnection({
 
 });
 
-let Dish = MyAppModel.extend({
-    tableName: "dishes"
+let MenuDuJour = MyAppModel.extend({
+    tableName: "menujour"
 });
 
 
-module.exports = Dish;
+module.exports = MenuDuJour;
 

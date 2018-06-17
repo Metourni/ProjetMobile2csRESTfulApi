@@ -3,14 +3,15 @@
 
 const express = require('express');
 const router = express.Router();
-const Restaurant = require('../models/Restaurant');
+const PlatBinaire = require('../models/PlatBinaire');
 const Paginator = 2;
+require('dotenv').config();
 
 
 router.get('/', (req, res, next) => {
-    let restaurant = new Restaurant();
-    restaurant.find('all', (err, rows, fields) => {
-        console.log(fields);
+    let platBinaire = new PlatBinaire();
+    platBinaire.find('all', (err, rows, fields) => {
+        //console.log(fields);
         if (err) {
             console.log(err);
             res.status(500).json({
@@ -20,7 +21,7 @@ router.get('/', (req, res, next) => {
         else {
             if (rows) {
                 res.status(201).json({
-                    restaurant: rows
+                    platBinaire: rows
                 });
             } else {
                 res.status(404).json({
@@ -42,10 +43,10 @@ router.get('/page/:index', (req, res, next) => {
     if (_start <= 0)
         _start = 0;
 
-    let restaurant = new Restaurant();
-    restaurant.find('all', {where: "restaurant_id > " + _start + " and restaurant_id <= " + _end }, (err, rows, fields) => {
+    console.log('_start ' + _start + ' _end ' + _end);
+    let platBinaire = new PlatBinaire();
+    platBinaire.find('all', {where: "platbinaire_id > " + _start + " and platbinaire_id <= " + _end }, (err, rows, fields) => {
         if (err) {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -53,7 +54,7 @@ router.get('/page/:index', (req, res, next) => {
         else {
             if (rows) {
                 res.status(201).json({
-                    restaurant: rows
+                    platBinaire: rows
                 });
             } else {
                 res.status(404).json({
@@ -66,10 +67,9 @@ router.get('/page/:index', (req, res, next) => {
 
 router.get('/:restaurantId', (req, res, next) => {
     const id = req.params.restaurantId;
-    let restaurant = new Restaurant();
-    restaurant.find('all', {where: "restaurant_id = " + id}, function (err, rows, fields) {
+    let platBinaire = new PlatBinaire();
+    platBinaire.find('first', {where: "platbinaire_id = " + id}, function (err, rows, fields) {
         if (err) {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -77,7 +77,7 @@ router.get('/:restaurantId', (req, res, next) => {
         else {
             if (rows) {
                 res.status(201).json({
-                    restaurant: rows
+                    platBinaire: rows
                 });
             } else {
                 res.status(404).json({
@@ -89,17 +89,19 @@ router.get('/:restaurantId', (req, res, next) => {
 
 });
 
-//TODO: set the full body of the restaurant.
 router.post('/', (req, res, next) => {
-    const rest = {
+    const newPlatBinaire = {
         //body Parser allow us to use attr 'body'
-        name: req.body.name,
+        nomPlat: req.body.nomPlat,
+        new_price: req.body.new_price,
+        image: req.body.image,
+        restaurant_id: req.body.restaurant_id,
+        category_id: req.body.category_id
     };
 
-    let restaurant = new Restaurant(rest);
-    restaurant.save(function (err, rows, fields) {
+    let platBinaire = new PlatBinaire(newPlatBinaire);
+    platBinaire.save(function (err, rows, fields) {
         if (err) {
-            console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -107,7 +109,10 @@ router.post('/', (req, res, next) => {
         else {
             if (rows) {
                 res.status(201).json({
-                    restaurant: rows
+                    platBinaire: {
+                        platBinaire: platBinaire,
+                        url: process.env.APP_URL + ":" + process.env.APP_PORT + "/platBinaire/" + rows.insertId
+                    }
                 });
             } else {
                 res.status(404).json({

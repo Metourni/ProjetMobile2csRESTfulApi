@@ -4,11 +4,11 @@
 const mysql = require('mysql');
 
 const con = mysql.createConnection({
-    host: "localhost",
-    port: "8889",
-    database: 'projet_mobile',
-    user: "root",
-    password: "root"
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD
 });
 
 con.connect(function(err) {
@@ -17,7 +17,7 @@ con.connect(function(err) {
     let sql =
         "CREATE TABLE IF NOT EXISTS restaurants " +
         "(" +
-        "   id INT AUTO_INCREMENT PRIMARY KEY," +
+        "   restaurant_id INT AUTO_INCREMENT PRIMARY KEY," +
         "   name VARCHAR(255), " +
         "   phoneNumber VARCHAR(255), " +
         "   localisation VARCHAR(255), " +
@@ -36,6 +36,27 @@ con.connect(function(err) {
 
     con.query(sql, function (err, result) {
         if (err) throw err;
-        console.log("Table created");
+        console.log("Table restaurants created");
+    });
+
+    sql =
+        "CREATE TABLE IF NOT EXISTS dishes " +
+        "(" +
+        "  dish_id INT AUTO_INCREMENT PRIMARY KEY," +
+        "  name  varchar(255) NOT NULL," +
+        "  rating  int(11) DEFAULT NULL," +
+        "  image  varchar(255) DEFAULT NULL," +
+        "  price  varchar(255) DEFAULT NULL," +
+        "  restaurant_id  int(11) DEFAULT NULL," +
+        "  category_id  int(11) DEFAULT NULL," +
+        "  platbinaire_id  int(11) DEFAULT NULL," +
+        "  menujour_id  int(11) DEFAULT NULL," +
+        "  panier_id  int(11) DEFAULT NULL" +
+        ")";
+
+
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Table dishes created");
     });
 });
