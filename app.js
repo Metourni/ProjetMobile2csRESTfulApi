@@ -8,13 +8,17 @@ const bodyParser = require('body-parser');
 const restaurantRoutes = require('./api/routes/RestaurantRoute');
 const dishRoutes = require('./api/routes/DishRoute');
 const platBinaireRoute = require('./api/routes/PlatBinaireRoute');
+const userRouter = require('./api/routes/UserRouter');
 
 
 
 app.use(morgan('dev'));// To log all request
+
 app.use(bodyParser.urlencoded({extended: false}));// for parsing application/x-www-form-urlencoded
 app.use(bodyParser.json());// for parsing application/json
-app.use(express.static('public'));
+
+//charger les fichiers qui sont dans le répertoire public à partir du préfixe de chemin d’accès /public.
+app.use('/public', express.static('public'));//Making the public folder accessible from out
 
 // Handling CORS
 app.use((req, res, next) => {
@@ -36,7 +40,9 @@ app.use((req, res, next) => {
 /** Use the routers in the api to handel the requests */
 app.use('/restaurants', restaurantRoutes);
 app.use('/dishes', dishRoutes);
-app.use('/platBinaire',platBinaireRoute);
+app.use('/platBinaire', platBinaireRoute);
+app.use('/auth', userRouter);
+
 
 
 /** Handel Errors */

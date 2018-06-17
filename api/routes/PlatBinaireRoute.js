@@ -4,6 +4,34 @@
 const express = require('express');
 const router = express.Router();
 const PlatBinaire = require('../models/PlatBinaire');
+
+/** File Handling and storing */
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './public/images/plat_binaire/');
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.originalname);
+    }
+});
+const fileFilter = (req, file, callback) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png')
+        callback(null, true);//accept file.
+    else
+        callback(null, false);//reject file.
+};
+const upload = multer(
+    {
+        storage: storage,
+        limits: {
+            fileSize: 1024 * 1024 * 5
+        },
+        fileFilter: fileFilter
+
+    }
+);
+
 const Paginator = 2;
 require('dotenv').config();
 
@@ -45,7 +73,7 @@ router.get('/page/:index', (req, res, next) => {
 
     console.log('_start ' + _start + ' _end ' + _end);
     let platBinaire = new PlatBinaire();
-    platBinaire.find('all', {where: "platbinaire_id > " + _start + " and platbinaire_id <= " + _end }, (err, rows, fields) => {
+    platBinaire.find('all', {where: "platbinaire_id > " + _start + " and platbinaire_id <= " + _end}, (err, rows, fields) => {
         if (err) {
             res.status(500).json({
                 error: err
@@ -89,12 +117,12 @@ router.get('/:restaurantId', (req, res, next) => {
 
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('img'), (req, res, next) => {
     const newPlatBinaire = {
         //body Parser allow us to use attr 'body'
         nomPlat: req.body.nomPlat,
         new_price: req.body.new_price,
-        image: req.body.image,
+        image: process.env.APP_URL + ":" + process.env.APP_PORT + "/" + req.file.path,
         restaurant_id: req.body.restaurant_id,
         category_id: req.body.category_id
     };
