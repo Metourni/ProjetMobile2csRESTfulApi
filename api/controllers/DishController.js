@@ -28,6 +28,29 @@ exports.get_all_dishes = (req, res, next) => {
     })
 };
 
+exports.get_dish_by_id = (req, res) => {
+    const dish_id = req.param.dish_id;
+    const dish = new Dish();
+
+    dish.find('first', {where: 'dish_id = ' + dish_id}, (error, rows) => {
+        if (error) {
+            res.status(500).json({
+                error: error
+            })
+        } else {
+            if (rows) {
+                res.status(201).json({
+                    dishes: rows
+                })
+            } else {
+                res.status(404).json({
+                    message: "Dish not found"
+                })
+            }
+        }
+    })
+};
+
 exports.get_dishes_by_restaurant = (req, res, next) => {
     const dish = new Dish();
     const restaurant_id = req.params.restaurant_id;
@@ -99,30 +122,7 @@ exports.get_dishes_by_restaurant_and_category = (req, res) => {
     )
 };
 
-exports.get_dishes_by_id = (req, res) => {
-    const dish_id = req.param.dish_id;
-    const dish = new Dish();
-
-    dish.find('first', {where: 'dish_id = ' + dish_id}, (error, rows) => {
-        if (error) {
-            res.status(500).json({
-                error: error
-            })
-        } else {
-            if (rows) {
-                res.status(201).json({
-                    dishes: rows
-                })
-            } else {
-                res.status(404).json({
-                    message: "Dish not found"
-                })
-            }
-        }
-    })
-};
-
-exports.delete_dishes_by_id = (req, res) => {
+exports.delete_dish_by_id = (req, res) => {
     const dish = new Dish();
     const dish_id = req.params.dish_id;
     console.log('kolll = ' + dish_id);
@@ -144,4 +144,24 @@ exports.delete_dishes_by_id = (req, res) => {
             }
         }
     });
+};
+
+/* TODO : Make method corps */
+exports.add_dish = (req, res) => {
+    const dish = new Dish();
+    const newDish = {};
+
+    res.status(300).json({
+        message: "Under construction"
+    })
+};
+
+/* TODO : Make method corps */
+exports.update_dish = (req, res) => {
+    const dish = new Dish();
+    const newDish = {};
+
+    res.status(300).json({
+        message: "Under construction"
+    })
 };

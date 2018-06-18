@@ -1,10 +1,12 @@
+'use strict';
 
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
 
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
+
 
 exports.user_register = (req, res, next) => {
     bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -55,7 +57,7 @@ exports.user_register = (req, res, next) => {
     })
 }
 
-exports.user_login =  (req, res, next) => {
+exports.user_login = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -84,14 +86,14 @@ exports.user_login =  (req, res, next) => {
                                 },
                                 process.env.JWT_KEY,
                                 {
-                                    expiresIn:"1h"
+                                    expiresIn: "1h"
                                 }
                             );
                             res.status(201).json({
                                 user: {
-                                    name : rows.name,
-                                    email : rows.email,
-                                    token :  token
+                                    name: rows.name,
+                                    email: rows.email,
+                                    token: token
                                 }
                             });
                         } else {

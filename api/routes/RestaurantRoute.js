@@ -3,185 +3,21 @@
 
 const express = require('express');
 const router = express.Router();
-const Restaurant = require('../models/Restaurant');
-const Paginator = 2;
+
+const ResturantController = require('../controllers/RestaurantController');
 
 
-router.get('/', (req, res, next) => {
-    let restaurant = new Restaurant();
-    restaurant.find('all', (err, rows, fields) => {
-        console.log(fields);
-        if (err) {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    restaurant: rows
-                });
-            } else {
-                res.status(404).json({
-                    message: "Restaurant not found"
-                });
-            }
-        }
-    });
-});
+router.get('/', ResturantController.get_all_restaurants);
 
-router.get('/page/:index', (req, res, next) => {
-    let i = 1;
-    if (req.params.index)
-        i = req.params.index;
+router.get('/:restaurant_id', ResturantController.get_restaurant_by_id);
 
-    let _start = (i * Paginator) - Paginator; // _start > 0
-    let _end = i * Paginator; // _end =< count
+router.get('/page/:index', ResturantController.get_all_restaurants_per_page);
 
-    if (_start <= 0)
-        _start = 0;
+router.delete('/:restaurant_id', ResturantController.delete_restaurant_by_id);
 
-    let restaurant = new Restaurant();
-    restaurant.find('all', {where: "restaurant_id > " + _start + " and restaurant_id <= " + _end }, (err, rows, fields) => {
-        if (err) {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    restaurant: rows
-                });
-            } else {
-                res.status(404).json({
-                    message: "Restaurant not found"
-                });
-            }
-        }
-    });
-});
+router.post('/', ResturantController.add_restaurant);
 
-router.get('/:restaurantId', (req, res, next) => {
-    const id = req.params.restaurantId;
-    let restaurant = new Restaurant();
-    restaurant.find('all', {where: "restaurant_id = " + id}, function (err, rows, fields) {
-        if (err) {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    restaurant: rows
-                });
-            } else {
-                res.status(404).json({
-                    message: "Restaurant not found"
-                });
-            }
-        }
-    });
+router.patch('/:restaurant_id', ResturantController.update_restaurant);
 
-});
-
-//TODO: set the full body of the restaurant.
-router.post('/', (req, res, next) => {
-    const rest = {
-        //body Parser allow us to use attr 'body'
-        name: req.body.name,
-    };
-
-    let restaurant = new Restaurant(rest);
-    restaurant.save(function (err, rows, fields) {
-        if (err) {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    restaurant: rows
-                });
-            } else {
-                res.status(404).json({
-                    message: "Restaurant not found"
-                });
-            }
-        }
-    });
-});
-
-
-//TODO: Update restaurant.
-router.patch('/:restaurantId', (req, res, next) => {
-    const id = req.params.restaurantId;
-    const newRestaurant = {};
-    let restaurant = new Restaurant();
-    restaurant.find('first', {where: "restaurant_id = " + id}, (err, rows, fields) => {
-        if (err) {
-            console.log("err : " + err);
-            res.status(500).json({
-                error: err
-            });
-        } else {
-            for (const ops of req.body) {
-                newRestaurant[ops.propertyName] = ops.value;
-                restaurant.set(ops.propertyName, ops.value);
-            }
-            restaurant.save();
-            res.status(201).json({
-                response: true
-            });
-        }
-    })
-});
-
-router.delete('/:restaurantId', (req, res, next) => {
-    const id = req.params.restaurantId;
-    let restaurant = new Restaurant();
-    restaurant.remove({where: "restaurant_id = " + id}, function (err, rows, fields) {
-        if (err) {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    message: "Successful deleted."
-                });
-            } else {
-                res.status(404).json({
-                    message: "Restaurant not found"
-                });
-            }
-        }
-    });
-
-});
 
 module.exports = router;
-
-/*
-module.exports = function (app) {
-    let restaurantCtrl = require('../controllers/RestaurantController');
-
-    // todoList Routes
-    app.route('/')
-        .get(restaurantCtrl.get_all_restaurant);
-
-
-    //app.route('/restaurant/:restaurant_id')
-      //  .get(restaurantCtrl.find_restaurant);
-    //.put(restaurantCtrl.)
-    //.delete(restaurantCtrl.);
-};
-*/
