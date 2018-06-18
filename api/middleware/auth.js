@@ -13,7 +13,6 @@ module.exports = (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_KEY, null);
 
         */
-        console.log(req.body.token);
         const decoded = jwt.verify(req.body.token, process.env.JWT_KEY, null);
         req.userDecodedData = decoded;
         next()

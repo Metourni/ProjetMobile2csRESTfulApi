@@ -50,7 +50,7 @@ exports.get_restaurant_by_id = (req, res) => {
 
 };
 
-exports.get_all_restaurants_per_page = (req, res, next) => {
+exports.get_all_restaurants_per_page = (req, res) => {
     let i = 1;
     if (req.params.index)
         i = req.params.index;
@@ -95,11 +95,11 @@ exports.delete_restaurant_by_id = (req, res) => {
             console.log(rows.affectedRows);
             if (rows.affectedRows >= 1) {
                 res.status(201).json({
-                    message: "Dish was successfully deleted"
+                    message: "Successfully deleted"
                 })
             } else {
                 res.status(404).json({
-                    message: "Dish not found"
+                    message: "Restaurant not found"
                 })
             }
         }

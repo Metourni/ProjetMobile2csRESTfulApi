@@ -125,7 +125,6 @@ exports.get_dishes_by_restaurant_and_category = (req, res) => {
 exports.delete_dish_by_id = (req, res) => {
     const dish = new Dish();
     const dish_id = req.params.dish_id;
-    console.log('kolll = ' + dish_id);
     dish.remove('dish_id = ' + dish_id, (error, rows) => {
         if (error) {
             res.status(500).json({
@@ -135,7 +134,7 @@ exports.delete_dish_by_id = (req, res) => {
             console.log(rows.affectedRows);
             if (rows.affectedRows >= 1) {
                 res.status(201).json({
-                    message: "Dish was successfully deleted"
+                    message: "Successfully deleted"
                 })
             } else {
                 res.status(404).json({

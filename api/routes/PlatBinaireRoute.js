@@ -3,7 +3,6 @@
 
 const express = require('express');
 const router = express.Router();
-const PlatBinaire = require('../models/PlatBinaire');
 
 /** File Handling and storing */
 const multer = require('multer');
@@ -12,7 +11,12 @@ const storage = multer.diskStorage({
         callback(null, './public/images/plat_binaire/');
     },
     filename: function (req, file, callback) {
-        callback(null, file.originalname);
+        let min = 1, max = 3000;
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        const random = Math.floor(Math.random() * (max - min + 1)) + min;
+        const fileExtension = ((file.mimetype).split('/'))[1];
+        callback(null, new Date().getTime() + random + "." + fileExtension);
     }
 });
 const fileFilter = (req, file, callback) => {
@@ -32,127 +36,22 @@ const upload = multer({
 
 const authMiddelware = require('../middleware/auth');
 
-const Paginator = 2;
-require('dotenv').config();
+const PlatBinaireController = require('../controllers/PlatBinaireController');
 
 
-router.get('/', (req, res, next) => {
-    let platBinaire = new PlatBinaire();
-    platBinaire.find('all', (err, rows, fields) => {
-        //console.log(fields);
-        if (err) {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    platBinaire: rows
-                });
-            } else {
-                res.status(404).json({
-                    message: "Plat binary not found"
-                });
-            }
-        }
-    });
-});
+router.get('/', PlatBinaireController.get_all_binary_dishes);
 
-router.get('/page/:index', (req, res, next) => {
-    let i = 1;
-    if (req.params.index)
-        i = req.params.index;
+router.get('/:platbinaire_id', PlatBinaireController.get_binary_dish_by_id);
 
-    let _start = (i * Paginator) - Paginator; // _start > 0
-    let _end = i * Paginator; // _end =< count
+router.get('/page/:index', PlatBinaireController.get_all_binary_dishes_per_page);
 
-    if (_start <= 0)
-        _start = 0;
+router.post('/', upload.single('img'), authMiddelware, PlatBinaireController.add_binary_dish);
 
-    console.log('_start ' + _start + ' _end ' + _end);
-    let platBinaire = new PlatBinaire();
-    platBinaire.find('all', {where: "platbinaire_id > " + _start + " and platbinaire_id <= " + _end}, (err, rows, fields) => {
-        if (err) {
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    platBinaire: rows
-                });
-            } else {
-                res.status(404).json({
-                    message: "Restaurant not found"
-                });
-            }
-        }
-    });
-});
-
-router.get('/:restaurantId', (req, res, next) => {
-    const id = req.params.restaurantId;
-    let platBinaire = new PlatBinaire();
-    platBinaire.find('first', {where: "platbinaire_id = " + id}, function (err, rows, fields) {
-        if (err) {
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    platBinaire: rows
-                });
-            } else {
-                res.status(404).json({
-                    message: "Restaurant not found"
-                });
-            }
-        }
-    });
-
-});
-
-router.post('/', upload.single('img'), authMiddelware, (req, res, next) => {
-    const newPlatBinaire = {
-        //body Parser allow us to use attr 'body'
-        nomPlat: req.body.nomPlat,
-        new_price: req.body.new_price,
-        image: process.env.APP_URL + ":" + process.env.APP_PORT + "/" + req.file.path,
-        restaurant_id: req.body.restaurant_id,
-        category_id: req.body.category_id
-    };
-
-    let platBinaire = new PlatBinaire(newPlatBinaire);
-    platBinaire.save(function (err, rows, fields) {
-        if (err) {
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    platBinaire: {
-                        platBinaire: platBinaire,
-                        url: process.env.APP_URL + ":" + process.env.APP_PORT + "/platBinaire/" + rows.insertId
-                    }
-                });
-            } else {
-                res.status(404).json({
-                    message: "Restaurant not found"
-                });
-            }
-        }
-    });
-});
+router.delete('/:platbinaire_id', authMiddelware, PlatBinaireController.delete_binary_dish_by_id);
 
 
-//TODO: Update restaurant.
+/*TODO : Controller*/
+
 router.patch('/:restaurantId', (req, res, next) => {
     const id = req.params.restaurantId;
     const newRestaurant = {};
@@ -176,29 +75,5 @@ router.patch('/:restaurantId', (req, res, next) => {
     })
 });
 
-router.delete('/:restaurantId', (req, res, next) => {
-    const id = req.params.restaurantId;
-    let restaurant = new Restaurant();
-    restaurant.remove({where: "restaurant_id = " + id}, function (err, rows, fields) {
-        if (err) {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        }
-        else {
-            if (rows) {
-                res.status(201).json({
-                    message: "Successful deleted."
-                });
-            } else {
-                res.status(404).json({
-                    message: "Restaurant not found"
-                });
-            }
-        }
-    });
-
-});
 
 module.exports = router;
