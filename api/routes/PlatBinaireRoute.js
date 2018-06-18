@@ -21,16 +21,16 @@ const fileFilter = (req, file, callback) => {
     else
         callback(null, false);//reject file.
 };
-const upload = multer(
-    {
-        storage: storage,
-        limits: {
-            fileSize: 1024 * 1024 * 5
-        },
-        fileFilter: fileFilter
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
 
-    }
-);
+});
+
+const authMiddelware = require('../middleware/auth');
 
 const Paginator = 2;
 require('dotenv').config();
@@ -117,7 +117,7 @@ router.get('/:restaurantId', (req, res, next) => {
 
 });
 
-router.post('/', upload.single('img'), (req, res, next) => {
+router.post('/', upload.single('img'), authMiddelware, (req, res, next) => {
     const newPlatBinaire = {
         //body Parser allow us to use attr 'body'
         nomPlat: req.body.nomPlat,
