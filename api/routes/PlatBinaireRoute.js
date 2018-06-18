@@ -53,7 +53,7 @@ router.get('/', (req, res, next) => {
                 });
             } else {
                 res.status(404).json({
-                    message: "Restaurant not found"
+                    message: "Plat binary not found"
                 });
             }
         }
@@ -202,19 +202,3 @@ router.delete('/:restaurantId', (req, res, next) => {
 });
 
 module.exports = router;
-
-/*
-module.exports = function (app) {
-    let restaurantCtrl = require('../controllers/RestaurantController');
-
-    // todoList Routes
-    app.route('/')
-        .get(restaurantCtrl.get_all_restaurant);
-
-
-    //app.route('/restaurant/:restaurant_id')
-      //  .get(restaurantCtrl.find_restaurant);
-    //.put(restaurantCtrl.)
-    //.delete(restaurantCtrl.);
-};
-*/
