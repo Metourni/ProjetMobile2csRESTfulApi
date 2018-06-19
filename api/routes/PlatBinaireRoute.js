@@ -49,31 +49,7 @@ router.post('/', upload.single('img'), authMiddelware, PlatBinaireController.add
 
 router.delete('/:platbinaire_id', authMiddelware, PlatBinaireController.delete_binary_dish_by_id);
 
-
-/*TODO : Controller*/
-
-router.patch('/:restaurantId', (req, res, next) => {
-    const id = req.params.restaurantId;
-    const newRestaurant = {};
-    let restaurant = new Restaurant();
-    restaurant.find('first', {where: "restaurant_id = " + id}, (err, rows, fields) => {
-        if (err) {
-            console.log("err : " + err);
-            res.status(500).json({
-                error: err
-            });
-        } else {
-            for (const ops of req.body) {
-                newRestaurant[ops.propertyName] = ops.value;
-                restaurant.set(ops.propertyName, ops.value);
-            }
-            restaurant.save();
-            res.status(201).json({
-                response: true
-            });
-        }
-    })
-});
+router.patch('/:platbinaire_id', PlatBinaireController.update_binary_dish);
 
 
 module.exports = router;

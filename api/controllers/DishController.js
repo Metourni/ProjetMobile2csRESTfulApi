@@ -145,18 +145,44 @@ exports.delete_dish_by_id = (req, res) => {
     });
 };
 
-/* TODO : Make method corps */
-exports.add_dish = (req, res) => {
+exports.update_dish = (req, res) => {
     const dish = new Dish();
-    const newDish = {};
+    const dish_id = req.params.dish_id;
 
-    res.status(300).json({
-        message: "Under construction"
-    })
+    let q = "UPDATE dishes SET ";
+    const body = req.body;
+    for (const ops in body) {
+        //TODO ; complet the table...
+        if (["category_id", "menujour_id","name"].includes(ops)) {
+            q += ops + " = '" + body[ops] + "' ,";
+        }
+    }
+    q = q.slice(0, (q.length - 1));
+    q += " WHERE dish_id = " + dish_id;
+
+    dish.query(q, (err, rows) => {
+        if (err) {
+            res.status(500).json({
+                error: err
+            });
+        } else {
+            console.log(rows);
+            if (rows.changedRows >= 1) {
+                res.status(201).json({
+                    response: true
+                });
+            } else {
+                res.status(404).json({
+                    message: "Dish not found"
+                })
+            }
+
+        }
+    });
 };
 
 /* TODO : Make method corps */
-exports.update_dish = (req, res) => {
+exports.add_dish = (req, res) => {
     const dish = new Dish();
     const newDish = {};
 

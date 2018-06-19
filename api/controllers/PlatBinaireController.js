@@ -143,5 +143,38 @@ exports.delete_binary_dish_by_id = (req, res) => {
     });
 };
 
+exports.update_binary_dish = (req, res) => {
+    let q = "UPDATE plat_binaire SET ";
+    const platbinaire_id = req.params.platbinaire_id;
+    const body = req.body;
+    for (const ops in body) {
+        if (["nomPlat", "new_price"].includes(ops)) {
+            q += ops + " = '" + body[ops] + "' ,";
+        }
+    }
+    q = q.slice(0, (q.length - 1));
+    q += " WHERE platbinaire_id = " + platbinaire_id;
+    const platBinaire = new PlatBinaire();
+    platBinaire.query(q, (err, rows) => {
+        if (err) {
+            res.status(500).json({
+                error: err
+            });
+        } else {
+            console.log(rows);
+            if (rows.changedRows >= 1) {
+                res.status(201).json({
+                    response: true
+                });
+            } else {
+                res.status(404).json({
+                    message: "Binary dish not found"
+                })
+            }
+
+        }
+    });
+};
+
 
 

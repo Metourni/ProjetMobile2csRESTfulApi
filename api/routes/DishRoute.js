@@ -22,7 +22,7 @@ router.delete('/:dish_id', authMiddelware, DishController.delete_dish_by_id);
 
 router.post('/', authMiddelware, DishController.add_dish);
 
-router.patch('/:dishId', authMiddelware, DishController.update_dish);
+router.patch('/:dish_id', authMiddelware, DishController.update_dish);
 
 
 // To use router out of this file (registering)

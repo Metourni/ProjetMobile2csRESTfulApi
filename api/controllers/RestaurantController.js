@@ -116,13 +116,40 @@ exports.add_restaurant = (req, res) => {
     })
 };
 
-/* TODO : Make method corps */
 exports.update_restaurant = (req, res) => {
-    const restaurant = new Restaurant();
-    const newRestaurant = {};
 
-    res.status(300).json({
-        message: "Under construction"
-    })
+    const restaurant = new Restaurant();
+    const restaurant_id = req.params.restaurant_id;
+
+    let q = "UPDATE restaurants SET ";
+    const body = req.body;
+    for (const ops in body) {
+        //TODO ; complet the table
+        if (["address", "dateFerm","facebook"].includes(ops)) {
+            q += ops + " = '" + body[ops] + "' ,";
+        }
+    }
+    q = q.slice(0, (q.length - 1));
+    q += " WHERE restaurant_id = " + restaurant_id;
+
+    restaurant.query(q, (err, rows) => {
+        if (err) {
+            res.status(500).json({
+                error: err
+            });
+        } else {
+            console.log(rows);
+            if (rows.changedRows >= 1) {
+                res.status(201).json({
+                    response: true
+                });
+            } else {
+                res.status(404).json({
+                    message: "Restaurant dish not found"
+                })
+            }
+
+        }
+    });
 };
 
