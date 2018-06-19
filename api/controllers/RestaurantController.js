@@ -1,8 +1,9 @@
 'use strict';
 
 const Restaurant = require('../models/Restaurant');
-const Paginator = 2;
+const validator = require('validator');
 
+const Paginator = 2;
 
 exports.get_all_restaurants = (req, res) => {
     const restaurant = new Restaurant();
@@ -106,16 +107,6 @@ exports.delete_restaurant_by_id = (req, res) => {
     });
 };
 
-/* TODO : Make method corps */
-exports.add_restaurant = (req, res) => {
-    const restaurant = new Restaurant();
-    const newRestaurant = {};
-
-    res.status(300).json({
-        message: "Under construction"
-    })
-};
-
 exports.update_restaurant = (req, res) => {
 
     const restaurant = new Restaurant();
@@ -125,7 +116,7 @@ exports.update_restaurant = (req, res) => {
     const body = req.body;
     for (const ops in body) {
         //TODO ; complet the table
-        if (["address", "dateFerm","facebook"].includes(ops)) {
+        if (["address", "dateFerm", "facebook"].includes(ops)) {
             q += ops + " = '" + body[ops] + "' ,";
         }
     }
@@ -138,7 +129,6 @@ exports.update_restaurant = (req, res) => {
                 error: err
             });
         } else {
-            console.log(rows);
             if (rows.changedRows >= 1) {
                 res.status(201).json({
                     response: true
@@ -152,4 +142,61 @@ exports.update_restaurant = (req, res) => {
         }
     });
 };
+
+exports.get_restaurant_with_dishes_by_id = (req, res) => {
+    const restaurant = new Restaurant();
+    const restaurant_id = req.params.restaurant_id;
+    restaurant.find('first', {where: "restaurant_id = " + restaurant_id}, (err, rows) => {
+            if (err) {
+                res.status(500).json({
+                    error: err
+                });
+            } else {
+                console.log(rows.length);
+                if (rows) {
+                    let q = "SELECT dishes.* " +
+                        "FROM restaurants JOIN dishes " +
+                        "ON restaurants.restaurant_id = dishes.restaurant_id " +
+                        "WHERE restaurants.restaurant_id = " + restaurant_id;
+                    restaurant.query(q, (err, rows_dishes) => {
+                        if (err) {
+                            res.status(500).json({
+                                error: err
+                            });
+                        } else {
+                            if (rows_dishes) {
+                                rows.dishes = rows_dishes;
+                                res.status(201).json({
+                                    restaurant: rows
+                                });
+                            } else {
+                                res.status(201).json({
+                                    restaurant: rows
+                                });
+                            }
+
+                        }
+                    });
+                }
+                else {
+                    res.status(404).json({
+                        message: "Restaurant dish not found"
+                    })
+                }
+
+            }
+        }
+    );
+};
+
+/* TODO : Make method corps */
+exports.add_restaurant = (req, res) => {
+    const restaurant = new Restaurant();
+    const newRestaurant = {};
+
+    res.status(300).json({
+        message: "Under construction"
+    })
+};
+
 
