@@ -29,7 +29,7 @@ exports.get_all_dishes = (req, res, next) => {
 };
 
 exports.get_dish_by_id = (req, res) => {
-    const dish_id = req.param.dish_id;
+    const dish_id = req.params.dish_id;
     const dish = new Dish();
 
     dish.find('first', {where: 'dish_id = ' + dish_id}, (error, rows) => {

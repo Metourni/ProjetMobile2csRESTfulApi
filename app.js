@@ -5,11 +5,12 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
 /** Router */
-const restaurantRoutes = require('./api/routes/RestaurantRoute');
-const dishRoutes = require('./api/routes/DishRoute');
-const platBinaireRoute = require('./api/routes/PlatBinaireRoute');
+const restaurantRouter = require('./api/routes/RestaurantRouter');
+const dishRouter = require('./api/routes/DishRouter');
+const platBinaireRouter = require('./api/routes/PlatBinaireRouter');
 const userRouter = require('./api/routes/UserRouter');
-
+const orderRouter = require('./api/routes/OrderRouter');
+const categoryRouter = require('./api/routes/CategoryRouter');
 
 
 app.use(morgan('dev'));// To log all request
@@ -38,17 +39,18 @@ app.use((req, res, next) => {
 });
 
 /** Use the routers in the api to handel the requests */
-app.use('/restaurants', restaurantRoutes);
-app.use('/dishes', dishRoutes);
-app.use('/platBinaire', platBinaireRoute);
+app.use('/restaurants', restaurantRouter);
+app.use('/dishes', dishRouter);
+app.use('/platBinaire', platBinaireRouter);
 app.use('/auth', userRouter);
-
+app.use('/orders', orderRouter);
+app.use('/categories', categoryRouter);
 
 
 /** Handel Errors */
 //If we arrived in this section that's mean we don't find a route for the request so we show 404 error.
 app.use((req, res, next) => {
-    const error = new Error('Not Found');
+    const error = new Error('Service not Found');
     error.status = 404;
     next(error);
 });
