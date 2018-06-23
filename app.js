@@ -11,6 +11,8 @@ const platBinaireRouter = require('./api/routes/PlatBinaireRouter');
 const userRouter = require('./api/routes/UserRouter');
 const orderRouter = require('./api/routes/OrderRouter');
 const categoryRouter = require('./api/routes/CategoryRouter');
+const menuDuJourRouter = require('./api/routes/MenuDuJourRouter');
+
 
 
 app.use(morgan('dev'));// To log all request
@@ -45,6 +47,7 @@ app.use('/platBinaire', platBinaireRouter);
 app.use('/auth', userRouter);
 app.use('/orders', orderRouter);
 app.use('/categories', categoryRouter);
+app.use('/menuJour', menuDuJourRouter);
 
 
 /** Handel Errors */

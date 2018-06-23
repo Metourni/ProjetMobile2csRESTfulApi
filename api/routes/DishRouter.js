@@ -18,6 +18,8 @@ router.get('/category/:category_id', DishController.get_dishes_by_category);
 
 router.get('/restaurant-category/:restaurant_id/:category_id', DishController.get_dishes_by_restaurant_and_category);
 
+router.get('/menujour/:menujour_id', DishController.get_dishes_by_menu_du_jour);
+
 router.delete('/:dish_id', authMiddelware, DishController.delete_dish_by_id);
 
 router.post('/', authMiddelware, DishController.add_dish);

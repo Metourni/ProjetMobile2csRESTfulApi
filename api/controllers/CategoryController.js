@@ -52,3 +52,32 @@ exports.add_category_to_fav = (req, res) => {
         }
     });
 };
+
+exports.get_category_by_menujour_id = (req, res) => {
+    const menujour_id = req.params.menujour_id;
+    const category = new Category();
+    const q =
+        "SELECT * " +
+        "From categories c inner join menujour mj " +
+        "ON c.category_id = mj.category_id " +
+        "WHERE mj.menujour_id = " + menujour_id;
+    category.query(q, (err, rows) => {
+        if (err) {
+            res.status(500).json({
+                error: err
+            });
+        } else {
+            if (rows) {
+                res.status(201).json({
+                    Categories: rows
+                });
+            } else {
+                res.status(404).json({
+                    message: "Categories not found"
+                })
+            }
+
+        }
+    });
+
+};

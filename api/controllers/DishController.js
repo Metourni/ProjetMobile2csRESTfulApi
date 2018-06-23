@@ -122,6 +122,32 @@ exports.get_dishes_by_restaurant_and_category = (req, res) => {
     )
 };
 
+exports.get_dishes_by_menu_du_jour = (req, res) => {
+    const dish = new Dish();
+    const menujour_id = req.params.menujour_id;
+    dish.find(
+        'all',
+        {where: "menujour_id = " + menujour_id},
+        (error, rows) => {
+            if (error) {
+                res.status(500).json({
+                    error: error
+                })
+            } else {
+                if (rows) {
+                    res.status(201).json({
+                        dishes: rows
+                    })
+                } else {
+                    res.status(404).json({
+                        message: "Dishes not found"
+                    })
+                }
+            }
+        }
+    )
+};
+
 exports.delete_dish_by_id = (req, res) => {
     const dish = new Dish();
     const dish_id = req.params.dish_id;
@@ -153,7 +179,7 @@ exports.update_dish = (req, res) => {
     const body = req.body;
     for (const ops in body) {
         //TODO ; complet the table...
-        if (["category_id", "menujour_id","name"].includes(ops)) {
+        if (["category_id", "menujour_id", "name"].includes(ops)) {
             q += ops + " = '" + body[ops] + "' ,";
         }
     }

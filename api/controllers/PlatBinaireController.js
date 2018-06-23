@@ -86,6 +86,30 @@ exports.get_binary_dish_by_id = (req, res) => {
 
 };
 
+exports.get_binary_dish_by_restaurant = (req, res) => {
+    const restaurant_id = req.params.restaurant_id;
+    const platBinaire = new PlatBinaire();
+    platBinaire.find('all', {where: "restaurant_id = " + restaurant_id}, function (err, rows) {
+        if (err) {
+            res.status(500).json({
+                error: err
+            });
+        }
+        else {
+            if (rows) {
+                res.status(201).json({
+                    platBinaire: rows
+                });
+            } else {
+                res.status(404).json({
+                    message: "Binary dish not found"
+                });
+            }
+        }
+    });
+
+};
+
 exports.add_binary_dish = (req, res) => {
     const newPlatBinaire = {
         //body Parser allow us to use attr 'body'

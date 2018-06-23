@@ -45,6 +45,8 @@ router.get('/:platbinaire_id', PlatBinaireController.get_binary_dish_by_id);
 
 router.get('/page/:index', PlatBinaireController.get_all_binary_dishes_per_page);
 
+router.get('/restaurant/:restaurant_id', PlatBinaireController.get_binary_dish_by_restaurant);
+
 router.post('/', upload.single('img'), authMiddelware, PlatBinaireController.add_binary_dish);
 
 router.delete('/:platbinaire_id', authMiddelware, PlatBinaireController.delete_binary_dish_by_id);

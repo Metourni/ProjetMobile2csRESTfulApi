@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le :  mer. 20 juin 2018 à 13:23
+-- Généré le :  sam. 23 juin 2018 à 03:00
 -- Version du serveur :  5.6.38
 -- Version de PHP :  7.2.1
 
@@ -23,9 +23,17 @@ SET time_zone = "+00:00";
 CREATE TABLE `Categories` (
   `category_id` int(11) NOT NULL,
   `categoryTxt` text NOT NULL,
-  `nb_plat` int(11) NOT NULL,
+  `nb_plat` int(11) DEFAULT NULL,
   `image` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `Categories`
+--
+
+INSERT INTO `Categories` (`category_id`, `categoryTxt`, `nb_plat`, `image`) VALUES
+(1, 'végétarien', 0, ''),
+(2, 'diabétique', 0, '');
 
 -- --------------------------------------------------------
 
@@ -51,9 +59,29 @@ CREATE TABLE `dishes` (
 --
 
 INSERT INTO `dishes` (`dish_id`, `name`, `rating`, `image`, `price`, `restaurant_id`, `category_id`, `platbinaire_id`, `menujour_id`, `panier_id`) VALUES
-(1, 'Plat 1', 3, NULL, '20114', 9, 1, NULL, NULL, NULL),
+(1, 'Plat 1', 3, NULL, '20114', 9, 1, NULL, 1, NULL),
 (2, 'dish 2', 4, NULL, '121515', 9, 2, NULL, NULL, NULL),
-(3, 'plat 3', 5, NULL, '2010', 10, 1, NULL, NULL, NULL);
+(3, 'plat 3', 5, NULL, '2010', 10, 1, NULL, 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fav_category`
+--
+
+CREATE TABLE `fav_category` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `fav_category`
+--
+
+INSERT INTO `fav_category` (`id`, `category_id`, `user_id`, `created_at`) VALUES
+(1, 1, 9, '2018-06-21 15:32:12');
 
 -- --------------------------------------------------------
 
@@ -69,6 +97,13 @@ CREATE TABLE `menujour` (
   `category_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `menujour`
+--
+
+INSERT INTO `menujour` (`menujour_id`, `nom`, `image`, `restaurant_id`, `category_id`) VALUES
+(1, 'Menu N', '', 9, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -82,6 +117,17 @@ CREATE TABLE `orders` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `restaurant_id`, `user_id`, `date`) VALUES
+(1, 9, 1, '2018-06-20 14:43:22'),
+(2, 9, 3, '2018-06-20 14:43:22'),
+(3, 9, 1, '2018-06-20 15:10:01'),
+(4, 9, 2, '2018-06-20 15:11:10'),
+(6, 9, 2, '2018-06-20 15:19:02');
+
 -- --------------------------------------------------------
 
 --
@@ -94,6 +140,18 @@ CREATE TABLE `order_line` (
   `dish_id` int(11) NOT NULL,
   `qte` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `order_line`
+--
+
+INSERT INTO `order_line` (`order_line_id`, `order_id`, `dish_id`, `qte`) VALUES
+(1, 1, 2, 2),
+(2, 1, 1, 3),
+(3, 1, 1, 4),
+(4, 1, 1, 4),
+(5, 1, 1, 4),
+(6, 1, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -128,10 +186,10 @@ INSERT INTO `plat_binaire` (`platbinaire_id`, `nomPlat`, `new_price`, `image`, `
 (11, 'cha5chouka 2', '232413', NULL, NULL, NULL),
 (12, 'cha5chouka 3', '232413', NULL, NULL, NULL),
 (13, 'cha5chouka 4', '232413', NULL, NULL, NULL),
-(15, 'Platsqdq', '1239090', 'http://localhost:3000/public/images/plat_binaire/koopman-google-play-store-badge.png', NULL, NULL),
-(16, 'Platsqdq', '1239090', 'http://localhost:3000/public/images/plat_binaire/user-meto.png', NULL, NULL),
-(17, 'Platooo', '123900', 'http://localhost:3000/public/images/plat_binaire/LogoSample_ByTailorBrands (1).jpeg', 1, 0),
-(18, 'Platooo 2', '123900', 'http://localhost:3000/public/images/plat_binaire/1529364586444.jpeg', 1, 0);
+(15, 'Platsqdq', '1239090', 'http://localhost:3000/public/images/plat_binaire/koopman-google-play-store-badge.png', 9, 1),
+(16, 'Platsqdq', '1239090', 'http://localhost:3000/public/images/plat_binaire/user-meto.png', 9, 1),
+(17, 'Platooo', '123900', 'http://localhost:3000/public/images/plat_binaire/LogoSample_ByTailorBrands (1).jpeg', 9, 2),
+(18, 'Platooo 2', '123900', 'http://localhost:3000/public/images/plat_binaire/1529364586444.jpeg', 9, 2);
 
 -- --------------------------------------------------------
 
@@ -204,6 +262,12 @@ ALTER TABLE `dishes`
   ADD PRIMARY KEY (`dish_id`);
 
 --
+-- Index pour la table `fav_category`
+--
+ALTER TABLE `fav_category`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `menujour`
 --
 ALTER TABLE `menujour`
@@ -248,7 +312,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `Categories`
 --
 ALTER TABLE `Categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `dishes`
@@ -257,16 +321,28 @@ ALTER TABLE `dishes`
   MODIFY `dish_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT pour la table `fav_category`
+--
+ALTER TABLE `fav_category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT pour la table `menujour`
 --
 ALTER TABLE `menujour`
-  MODIFY `menujour_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `menujour_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `order_line`
 --
 ALTER TABLE `order_line`
-  MODIFY `order_line_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_line_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `plat_binaire`
