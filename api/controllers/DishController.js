@@ -148,6 +148,32 @@ exports.get_dishes_by_menu_du_jour = (req, res) => {
     )
 };
 
+exports.get_dishes_by_plat_binaire = (req, res) => {
+    const dish = new Dish();
+    const platbinaire_id = req.params.platbinaire_id;
+    dish.find(
+        'all',
+        {where: "platbinaire_id = " + platbinaire_id},
+        (error, rows) => {
+            if (error) {
+                res.status(500).json({
+                    error: error
+                })
+            } else {
+                if (rows) {
+                    res.status(201).json({
+                        dishes: rows
+                    })
+                } else {
+                    res.status(404).json({
+                        message: "Dishes not found"
+                    })
+                }
+            }
+        }
+    )
+};
+
 exports.delete_dish_by_id = (req, res) => {
     const dish = new Dish();
     const dish_id = req.params.dish_id;

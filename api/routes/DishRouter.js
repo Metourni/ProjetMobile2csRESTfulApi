@@ -20,6 +20,8 @@ router.get('/restaurant-category/:restaurant_id/:category_id', DishController.ge
 
 router.get('/menujour/:menujour_id', DishController.get_dishes_by_menu_du_jour);
 
+router.get('/platBinaire/:platbinaire_id', DishController.get_dishes_by_plat_binaire);
+
 router.delete('/:dish_id', authMiddelware, DishController.delete_dish_by_id);
 
 router.post('/', authMiddelware, DishController.add_dish);
