@@ -235,10 +235,38 @@ exports.update_dish = (req, res) => {
 
 /* TODO : Make method corps */
 exports.add_dish = (req, res) => {
-    const dish = new Dish();
-    const newDish = {};
+    const newDish = {
+        name: req.body.name,
+        price: req.body.price,
+        rating: req.body.rating,
+        restaurant_id: req.body.restaurant_id,
+        category_id: req.body.category_id,
+        platbinaire_id: req.body.platbinaire_id,
+        menujour_id: req.body.menujour_id,
+        panier_id: req.body.panier_id,
+        image: process.env.APP_URL + ":" + process.env.APP_PORT + "/" + req.file.path,
+    };
 
-    res.status(300).json({
-        message: "Under construction"
-    })
+    const dish = new Dish(newDish);
+    dish.save(function (err, rows) {
+        if (err) {
+            res.status(500).json({
+                error: err
+            });
+        }
+        else {
+            if (rows) {
+                res.status(201).json({
+                    platBinaire: {
+                        platBinaire: platBinaire,
+                        url: process.env.APP_URL + ":" + process.env.APP_PORT + "/platBinaire/" + rows.insertId
+                    }
+                });
+            } else {
+                res.status(404).json({
+                    message: "not found"
+                });
+            }
+        }
+    });
 };

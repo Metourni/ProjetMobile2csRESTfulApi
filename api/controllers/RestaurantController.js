@@ -215,7 +215,7 @@ exports.add_restaurant = (req, res) => {
                 res.status(201).json({
                     platBinaire: {
                         platBinaire: platBinaire,
-                        url: process.env.APP_URL + ":" + process.env.APP_PORT + "/platBinaire/" + rows.insertId
+                        url: process.env.APP_URL + ":" + process.env.APP_PORT + "/restaurants/" + rows.insertId
                     }
                 });
             } else {
