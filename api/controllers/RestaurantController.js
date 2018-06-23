@@ -15,9 +15,7 @@ exports.get_all_restaurants = (req, res) => {
         }
         else {
             if (rows) {
-                res.status(201).json({
-                    restaurant: rows
-                });
+                res.status(201).json(rows);
             } else {
                 res.status(404).json({
                     message: "Restaurants not found"
@@ -38,9 +36,7 @@ exports.get_restaurant_by_id = (req, res) => {
         }
         else {
             if (rows) {
-                res.status(201).json({
-                    restaurant: rows
-                });
+                res.status(201).json(rows);
             } else {
                 res.status(404).json({
                     message: "Restaurant not found"
@@ -191,12 +187,44 @@ exports.get_restaurant_with_dishes_by_id = (req, res) => {
 
 /* TODO : Make method corps */
 exports.add_restaurant = (req, res) => {
-    const restaurant = new Restaurant();
-    const newRestaurant = {};
+    const newRestaurant = {
+        name: req.body.name,
+        phoneNumber: req.body.phoneNumber,
+        localisation: req.body.localisation,
+        email: req.body.email,
+        address: req.body.address,
+        description: req.body.description,
+        facebook: req.body.facebook,
+        twitter: req.body.twitter,
+        rating: req.body.rating,
+        nbTable: req.body.nbTable,
+        dateOuv: req.body.dateOuv,
+        dateFerm: req.body.dateFerm,
+        image: process.env.APP_URL + ":" + process.env.APP_PORT + "/" + req.file.path,
+    };
 
-    res.status(300).json({
-        message: "Under construction"
-    })
+    const restaurant = new Restaurant(newRestaurant);
+    restaurant.save(function (err, rows) {
+        if (err) {
+            res.status(500).json({
+                error: err
+            });
+        }
+        else {
+            if (rows) {
+                res.status(201).json({
+                    platBinaire: {
+                        platBinaire: platBinaire,
+                        url: process.env.APP_URL + ":" + process.env.APP_PORT + "/platBinaire/" + rows.insertId
+                    }
+                });
+            } else {
+                res.status(404).json({
+                    message: "not found"
+                });
+            }
+        }
+    });
 };
 
 
