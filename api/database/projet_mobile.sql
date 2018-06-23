@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le :  sam. 23 juin 2018 à 22:59
+-- Généré le :  sam. 23 juin 2018 à 23:02
 -- Version du serveur :  5.6.38
 -- Version de PHP :  7.2.1
 
@@ -201,8 +201,8 @@ CREATE TABLE `restaurants` (
   `restaurant_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `phoneNumber` varchar(255) DEFAULT NULL,
-  `lat` double DEFAULT NULL,
-  `lon` double NOT NULL,
+  `latitude` double DEFAULT NULL,
+  `longitude` double NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `description` varchar(1024) DEFAULT NULL,
@@ -219,7 +219,7 @@ CREATE TABLE `restaurants` (
 -- Déchargement des données de la table `restaurants`
 --
 
-INSERT INTO `restaurants` (`restaurant_id`, `name`, `phoneNumber`, `lat`, `lon`, `email`, `address`, `description`, `facebook`, `twitter`, `rating`, `nbTable`, `dateOuv`, `dateFerm`, `image`) VALUES
+INSERT INTO `restaurants` (`restaurant_id`, `name`, `phoneNumber`, `latitude`, `longitude`, `email`, `address`, `description`, `facebook`, `twitter`, `rating`, `nbTable`, `dateOuv`, `dateFerm`, `image`) VALUES
 (9, 'Ramdann', '0772828522', 0, 0, 'ramdan@esi.dz', 'Oued samar', 'Best Karentita ever', '0000199999', NULL, 5, 2, '2018-06-18 00:00:00', '2018-06-18 00:00:00', NULL);
 
 -- --------------------------------------------------------
