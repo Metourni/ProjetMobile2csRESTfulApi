@@ -13,9 +13,7 @@ exports.get_all_categories = (req, res) => {
             })
         } else {
             if (rows) {
-                res.status(201).json({
-                    Categories: rows
-                })
+                res.status(201).json(rows)
             } else {
                 res.status(404).json({
                     message: "Categories not found"
@@ -68,9 +66,7 @@ exports.get_category_by_menujour_id = (req, res) => {
             });
         } else {
             if (rows) {
-                res.status(201).json({
-                    Categories: rows
-                });
+                res.status(201).json(rows);
             } else {
                 res.status(404).json({
                     message: "Categories not found"

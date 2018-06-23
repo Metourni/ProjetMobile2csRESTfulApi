@@ -16,9 +16,7 @@ exports.get_all_binary_dishes = (req, res) => {
         }
         else {
             if (rows) {
-                res.status(201).json({
-                    platBinaire: rows
-                });
+                res.status(201).json(rows);
             } else {
                 res.status(404).json({
                     message: "Binary dishes not found"
@@ -50,9 +48,7 @@ exports.get_all_binary_dishes_per_page = (req, res) => {
         }
         else {
             if (rows) {
-                res.status(201).json({
-                    platBinaire: rows
-                });
+                res.status(201).json(rows);
             } else {
                 res.status(404).json({
                     message: "Binary dishes not found"
@@ -73,9 +69,7 @@ exports.get_binary_dish_by_id = (req, res) => {
         }
         else {
             if (rows) {
-                res.status(201).json({
-                    platBinaire: rows
-                });
+                res.status(201).json(rows);
             } else {
                 res.status(404).json({
                     message: "Binary dish not found"
@@ -97,9 +91,7 @@ exports.get_binary_dish_by_restaurant = (req, res) => {
         }
         else {
             if (rows) {
-                res.status(201).json({
-                    platBinaire: rows
-                });
+                res.status(201).json(rows);
             } else {
                 res.status(404).json({
                     message: "Binary dish not found"

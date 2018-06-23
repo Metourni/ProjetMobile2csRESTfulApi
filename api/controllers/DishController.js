@@ -16,9 +16,7 @@ exports.get_all_dishes = (req, res, next) => {
             })
         } else {
             if (rows) {
-                res.status(201).json({
-                    dishes: rows
-                })
+                res.status(201).json(rows)
             } else {
                 res.status(404).json({
                     message: "Dishes not found"
@@ -39,9 +37,7 @@ exports.get_dish_by_id = (req, res) => {
             })
         } else {
             if (rows) {
-                res.status(201).json({
-                    dishes: rows
-                })
+                res.status(201).json(rows)
             } else {
                 res.status(404).json({
                     message: "Dish not found"
@@ -61,9 +57,7 @@ exports.get_dishes_by_restaurant = (req, res, next) => {
             })
         } else {
             if (rows) {
-                res.status(201).json({
-                    dishes: rows
-                })
+                res.status(201).json(rows);
             } else {
                 res.status(404).json({
                     message: "Dishes not found"
@@ -83,9 +77,7 @@ exports.get_dishes_by_category = (req, res) => {
             })
         } else {
             if (rows) {
-                res.status(201).json({
-                    dishes: rows
-                })
+                res.status(201).json(rows)
             } else {
                 res.status(404).json({
                     message: "Dishes not found"
@@ -109,9 +101,7 @@ exports.get_dishes_by_restaurant_and_category = (req, res) => {
                 })
             } else {
                 if (rows) {
-                    res.status(201).json({
-                        dishes: rows
-                    })
+                    res.status(201).json(rows)
                 } else {
                     res.status(404).json({
                         message: "Dishes not found"
@@ -135,9 +125,7 @@ exports.get_dishes_by_menu_du_jour = (req, res) => {
                 })
             } else {
                 if (rows) {
-                    res.status(201).json({
-                        dishes: rows
-                    })
+                    res.status(201).json(rows)
                 } else {
                     res.status(404).json({
                         message: "Dishes not found"
@@ -161,9 +149,7 @@ exports.get_dishes_by_plat_binaire = (req, res) => {
                 })
             } else {
                 if (rows) {
-                    res.status(201).json({
-                        dishes: rows
-                    })
+                    res.status(201).json(rows)
                 } else {
                     res.status(404).json({
                         message: "Dishes not found"
@@ -233,7 +219,6 @@ exports.update_dish = (req, res) => {
     });
 };
 
-/* TODO : Make method corps */
 exports.add_dish = (req, res) => {
     const newDish = {
         name: req.body.name,

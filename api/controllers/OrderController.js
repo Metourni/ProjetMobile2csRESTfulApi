@@ -16,9 +16,7 @@ exports.get_all_orders = (req, res) => {
             })
         } else {
             if (rows) {
-                res.status(201).json({
-                    orders: rows
-                })
+                res.status(201).json(rows)
             } else {
                 res.status(404).json({
                     message: "Orders not found"
@@ -39,9 +37,7 @@ exports.get_order_by_id = (req, res) => {
             })
         } else {
             if (rows) {
-                res.status(201).json({
-                    orders: rows
-                })
+                res.status(201).json(rows)
             } else {
                 res.status(404).json({
                     message: "Orders not found"
@@ -134,9 +130,7 @@ exports.get_full_order_by_id = (req, res) => {
                         } else {
                             if (lines_order) {
                                 rows.cmd = lines_order;
-                                res.status(201).json({
-                                    order: rows
-                                });
+                                res.status(201).json(rows);
                             } else {
                                 res.status(201).json({
                                     order: rows

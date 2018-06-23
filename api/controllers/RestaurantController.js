@@ -68,9 +68,7 @@ exports.get_all_restaurants_per_page = (req, res) => {
         }
         else {
             if (rows) {
-                res.status(201).json({
-                    restaurant: rows
-                });
+                res.status(201).json(rows);
             } else {
                 res.status(404).json({
                     message: "Restaurants not found"
@@ -162,13 +160,9 @@ exports.get_restaurant_with_dishes_by_id = (req, res) => {
                         } else {
                             if (rows_dishes) {
                                 rows.dishes = rows_dishes;
-                                res.status(201).json({
-                                    restaurant: rows
-                                });
+                                res.status(201).json(rows);
                             } else {
-                                res.status(201).json({
-                                    restaurant: rows
-                                });
+                                res.status(201).json(rows);
                             }
 
                         }

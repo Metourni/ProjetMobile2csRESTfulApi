@@ -15,9 +15,7 @@ exports.get_all_menu_day = (req, res) => {
             })
         } else {
             if (rows) {
-                res.status(201).json({
-                    menuDuJour: rows
-                })
+                res.status(201).json(rows)
             } else {
                 res.status(404).json({
                     message: "Menu du jour not found"
@@ -37,9 +35,7 @@ exports.get_menu_day_by_restaurant = (req, res) => {
             })
         } else {
             if (rows) {
-                res.status(201).json({
-                    menuDuJour: rows
-                })
+                res.status(201).json(rows)
             } else {
                 res.status(404).json({
                     message: "menuDuJour not found"
