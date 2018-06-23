@@ -19,3 +19,6 @@
     - Validation.
     - Role Middeleware
     - Has authority
+
+## PostMan Project Url
+    https://www.getpostman.com/collections/7fef78066220be35f8b5
